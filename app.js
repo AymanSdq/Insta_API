@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 require('dotenv').config()
+// Calling the routes
+const regsiterRouter = require("./routes/registerRoutes");
+const RegisterModel = require('./models/Register');
 
 // Calling JSON
 app.use(express.json());
@@ -11,6 +14,14 @@ app.use(express.json());
 mongoose.connect(process.env.DATABASE_URL);
 mongoose.connection.on("connected", () => { console.log("Database On") });
 mongoose.connection.on("error", () => { console.log("Database Error") });
+
+
+// All the routes
+app.get('/', (req, res) =>{
+    res.send("This is the home page!")
+})
+
+app.use('/register', regsiterRouter)
 
 // Listening to the server
 app.listen(
