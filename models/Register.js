@@ -52,15 +52,14 @@ const registerSchema = new Schema({
     // Password 
     password : {
         type : String,
-        required : true,
         minlength : 8,
         validate: {
             validator: function (value) {
-              // Use a regular expression to check for at least one special character
                 return /[!@#$-_%^&*(),.?":{}|<>]/.test(value);
             },
             message: 'Password must contain at least one special character',
         },
+        required : true,
     },
 
     // Confrim Password
@@ -97,15 +96,19 @@ const registerSchema = new Schema({
 
 });
 
-
 // Crypting the [Password] Before saving it 
-registerSchema.pre("save", async (next) => {
+registerSchema.pre("save", async function(next) {
 
     const salt = await bcrypt.genSalt();
+
+    console.log(registerSchema.password)
     this.password = await bcrypt.hash(this.password, salt);
+    
     next();
 
 });
+
+
 
 const RegisterModel = mongoose.model("Register", registerSchema);
 
