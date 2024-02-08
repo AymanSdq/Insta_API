@@ -17,17 +17,11 @@ const registerSchema = new Schema({
         unique : true,
         lowercase : true,
         maxlength : 20,
+        minlength : 5,
     },
 
-    // firstName
-    firstName : {
-        type : String,
-        required: true,
-        maxlength: 50,
-    },
-
-    // lastName
-    lastName : {
+    // full name
+    fullName : {
         type : String,
         required: true,
         maxlength: 50,
@@ -62,29 +56,6 @@ const registerSchema = new Schema({
         required : true,
     },
 
-    // Confrim Password
-    confirm_Password : {
-        type : String,
-        minlenght : 8 ,
-        required : true,
-        validate : {
-            validator: function (value) {
-                return value === this.password;
-            },
-            message : "Password Doesn't match!" 
-        }
-    },
-
-    // Phone number
-    phone : {
-        type : String,
-        validate: {
-            validator: function (value) {
-                return /^\d{10}$/g.test(value);
-            },
-            message: 'Invalid phone number format',
-        },
-    },
 
     // Date of Register
     dateOfRegister : {
@@ -101,7 +72,6 @@ registerSchema.pre("save", async function(next) {
 
     const salt = await bcrypt.genSalt();
 
-    console.log(registerSchema.password)
     this.password = await bcrypt.hash(this.password, salt);
     
     next();

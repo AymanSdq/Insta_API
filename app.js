@@ -5,6 +5,7 @@ require('dotenv').config()
 // Calling the routes
 const regsiterRouter = require("./routes/registerRoutes");
 const RegisterModel = require('./models/Register');
+const loginRouter = require('./routes/loginRoutes');
 
 // Calling JSON
 app.use(express.json());
@@ -21,7 +22,8 @@ app.get('/', (req, res) =>{
     res.send("This is the home page!")
 })
 
-app.use('/register', regsiterRouter)
+app.use('/register', regsiterRouter);
+app.use('/login', loginRouter);
 
 // Listening to the server
 app.listen(
