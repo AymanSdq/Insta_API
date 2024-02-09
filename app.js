@@ -27,7 +27,7 @@ app.use('/login', loginRouter);
 
 // Listening to the server
 app.listen(
-    3000,
+    process.env.PORT,
     console.clear(),
     console.log("Running the server on : http://localhost:3000/")
 );
