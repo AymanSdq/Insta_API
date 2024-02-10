@@ -25,6 +25,7 @@ app.get('/', (req, res) =>{
 app.use('/register', regsiterRouter);
 app.use('/login', loginRouter);
 
+
 // Listening to the server
 app.listen(
     process.env.PORT,
