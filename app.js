@@ -11,7 +11,7 @@ const loginRouter = require('./routes/loginRoutes');
 app.use(express.json());
 
 
-// Connection to database
+// Connection to database // Connection before listening to the port
 mongoose.connect(process.env.DATABASE_URL);
 mongoose.connection.on("connected", () => { console.log("Database On") });
 mongoose.connection.on("error", () => { console.log("Database Error") });
