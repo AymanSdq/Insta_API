@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
 function authenticateToken(req, res, next){
     // Get the header Auth token
@@ -9,7 +10,15 @@ function authenticateToken(req, res, next){
         return res.sendStatus(401);
     }
 
-    jwt.verify();
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+        if (err) {
+            return res.sendStatus(403); // Token is invalid
+        }
+
+        req.user = user;
+
+        next();
+    });
 
 }; 
 
