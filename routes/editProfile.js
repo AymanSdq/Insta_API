@@ -1,4 +1,5 @@
 const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
 const router = express.Router();
 const authenticateToken = require("../middlewares/authToken");
@@ -7,12 +8,14 @@ const { route } = require("./loginRoutes");
 const bcrypt = require("bcrypt")
 
 
-router.get("/", authenticateToken, async (req , res) => {
 
-    
-    const {username, fullName, email, password, oldPassword} = req.body;
+app.use(express.json());
+
+router.patch("/", authenticateToken, async (req , res) => {
 
     try{
+
+        const {username, fullName, email} = req.body;
 
         const findUserAuth = await Register.findById(req.user.id);
         
@@ -27,25 +30,26 @@ router.get("/", authenticateToken, async (req , res) => {
             findUserAuth.email = email;
         }
 
-        // Check of the old Password is correct or no
-        if(password){
-            if(oldPassword == null){
-                return res.send("You must enter the old Password");
-            }else if(oldPassword){
-                // check if the password is correct or no
-                if(await bcrypt.compare(oldPassword, findUserAuth.password)){
-                    res.send("The old password is correct")
+        //Changing the password for the user
+        if(req.body.newPassword){
+            // Check if the old Password is entered
+            if(req.body.oldPassword == null){
+                return res.send("You must enter the old password!");
+            }else{
+                // Compare the password if it's coorect or not correct
+                if(await bcrypt.compare(req.body.oldPassword, findUserAuth.password)){
+                    // if the code is correct execute this lines
+                    findUserAuth.password = req.body.newPassword;
                 }else{
-                    return res.send("Old Password is not correct!");
+                    // This will be shown if the code is not correct
+                    return res.send("The old password is Incorrect!");
                 }
             }
         }
+        
+        const saveUserUpdates = await findUserAuth.save();
 
-
-
-        const updateUser = await findUserAuth.save();
-
-        res.json({ message: "User updated successfully", updateUser });
+        res.json({message : "The user is up to date", newData : saveUserUpdates});
 
         
     }catch(err){

@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
 
             saveToken.save();
 
-            res.status(202).send("Logged in succeffuly");
+            res.status(202).json({message : "You are Logged in"});
 
 
         }else{
