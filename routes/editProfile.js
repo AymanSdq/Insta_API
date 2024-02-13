@@ -4,34 +4,53 @@ const router = express.Router();
 const authenticateToken = require("../middlewares/authToken");
 const Register = require("../models/Register");
 const { route } = require("./loginRoutes");
+const bcrypt = require("bcrypt")
 
 
-router.get("/", authenticateToken , async (req, res) => {
+router.get("/", authenticateToken, async (req , res) => {
+
+    
+    const {username, fullName, email, password, oldPassword} = req.body;
+
+    try{
+
+        const findUserAuth = await Register.findById(req.user.id);
+        
+        // Check if there is update
+        if(username){
+            findUserAuth.username = username;
+        }
+        if(fullName){
+            findUserAuth.fullName = fullName;
+        }
+        if(email){
+            findUserAuth.email = email;
+        }
+
+        // Check of the old Password is correct or no
+        if(password){
+            if(oldPassword == null){
+                return res.send("You must enter the old Password");
+            }else if(oldPassword){
+                // check if the password is correct or no
+                if(await bcrypt.compare(oldPassword, findUserAuth.password)){
+                    res.send("The old password is correct")
+                }else{
+                    return res.send("Old Password is not correct!");
+                }
+            }
+        }
 
 
-    const findUserAuth = await Register.findById(req.user.id)
-    res.send(findUserAuth);
 
-});
+        const updateUser = await findUserAuth.save();
 
-router.patch("/:id", authenticateToken, async (req , res) => {
+        res.json({ message: "User updated successfully", updateUser });
 
-    const {username, fullName, email, password} = req.body;
-
-    // Save the data in Objects
-    const updates = {};
-    // Check if there is update
-    if(username){
-        updates.username = username;
+        
+    }catch(err){
+        res.status(502).json({message : err.message})
     }
-    if(fullName){
-        updates.username = username;
-    }
-    if(email){
-        updates.username = username;
-    }
-
-
 
 });
 
