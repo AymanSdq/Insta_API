@@ -8,6 +8,7 @@ const { route } = require("./loginRoutes");
 const bcrypt = require("bcrypt")
 // multer to upload images
 const multer = require("multer");
+const path = require("path")
 
 
 app.use(express.static('public'));
@@ -16,11 +17,20 @@ app.use(express.json());
 
 
 
-// 
+// addint the path and the file name that will run every time
+const storage = multer.diskStorage({
+    
+    destination : function(req, file, cb){
+        cb(null, 'public/uploads/ProfilePic/')
+    },
+    filename: function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1]);
+    }
+});
 
+const upload = multer({ storage : storage });
 
-
-router.patch("/", authenticateToken, async (req , res) => {
+router.patch("/", authenticateToken, upload.single('profileImage') , async (req , res) => {
 
 
     try{
@@ -58,7 +68,9 @@ router.patch("/", authenticateToken, async (req , res) => {
         }
 
         // Check if the image profile has been updates
-        
+        if(req.file){
+            findUserAuth.profileImage = req.file.path
+        }
         
         const saveUserUpdates = await findUserAuth.save();
 
