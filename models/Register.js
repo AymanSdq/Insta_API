@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const bcrypt = require("bcrypt");
+app.use(express.static('public'));
+
 
 
 // Creating a Schema
@@ -54,6 +56,12 @@ const registerSchema = new Schema({
             message: 'Password must contain at least one special character',
         },
         required : true,
+    },
+
+    // Addding the profileImage
+    profileImage: {
+        type: String,
+        default: "/uploads/profilePic/Default_pfp.svg.png", 
     },
 
 

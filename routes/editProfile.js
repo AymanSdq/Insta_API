@@ -6,12 +6,22 @@ const authenticateToken = require("../middlewares/authToken");
 const Register = require("../models/Register");
 const { route } = require("./loginRoutes");
 const bcrypt = require("bcrypt")
+// multer to upload images
+const multer = require("multer");
 
 
+app.use(express.static('public'));
 
 app.use(express.json());
 
+
+
+// 
+
+
+
 router.patch("/", authenticateToken, async (req , res) => {
+
 
     try{
 
@@ -46,6 +56,9 @@ router.patch("/", authenticateToken, async (req , res) => {
                 }
             }
         }
+
+        // Check if the image profile has been updates
+        
         
         const saveUserUpdates = await findUserAuth.save();
 
