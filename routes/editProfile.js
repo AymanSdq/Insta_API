@@ -30,25 +30,9 @@ const storage = multer.diskStorage({
     }
 });
 
-// Creating the function that will choose only the image that must be added 
-const fileFilter = (req, file, cb ) => {
-    // Allowed ext
-    const filetypes = /jpeg|jpg|png/ ;
 
-    //check ext 
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb('Error: Images Only!'); 
-    }
-
-    
-}
-
-const upload = multer({ storage : storage, fileFilter: fileFilter});
+const upload = multer({ storage : storage});
 
 router.patch("/", authenticateToken, upload.single('profileImage') , async (req , res) => {
 
