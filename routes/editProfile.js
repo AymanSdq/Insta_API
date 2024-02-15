@@ -19,14 +19,34 @@ app.use(express.json());
 
 // addint the path and the file name that will run every time
 const storage = multer.diskStorage({
-    
+    // This is the destination where the files must be save in your server
     destination : function(req, file, cb){
         cb(null, 'public/uploads/ProfilePic/')
     },
+
+    // This is the file name that should be save 
     filename: function(req, file, cb){
         cb(null, file.fieldname + '-' + Date.now() + '.' + file.mimetype.split('/')[1]);
     }
 });
+
+// Creating the function that will choose only the image that must be added 
+const fileFilter = (req, file, cb ) => {
+    // Allowed ext
+    const fileTypes = /jpeg|jpg|png/ ;
+
+    //check ext 
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+        return cb(null, true);
+    } else {
+        cb('Error: Images Only!'); 
+    }
+
+    
+}
 
 const upload = multer({ storage : storage });
 
