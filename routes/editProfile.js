@@ -39,7 +39,7 @@ router.patch("/", authenticateToken, upload.single('profileImage') , async (req 
 
     try{
 
-        const {username, fullName, email} = req.body;
+        const {username, fullName, email, bioProfile} = req.body;
 
         const findUserAuth = await Register.findById(req.user.id);
         
@@ -74,6 +74,11 @@ router.patch("/", authenticateToken, upload.single('profileImage') , async (req 
         // Check if the image profile has been updates
         if(req.file){
             findUserAuth.profileImage = req.file.path
+        }
+
+        // Check if the user entered a bio
+        if(bioProfile){
+            findUserAuth.bioProfile = bioProfile
         }
         
         const saveUserUpdates = await findUserAuth.save();

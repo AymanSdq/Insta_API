@@ -65,6 +65,12 @@ const registerSchema = new Schema({
     },
 
 
+    // Adding the bioProfile section
+    bioProfile : {
+        type : String,
+        maxlength: 150,
+    },
+
     // Date of Register
     dateOfRegister : {
         type : Date,
