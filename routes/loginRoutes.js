@@ -17,13 +17,18 @@ router.post('/', async (req, res) => {
     try{ 
 
         // Checking if the email or the password are entered
-        if(await req.body.email == null){
-            return res.status(402).send("Please Enter your email!")
+        if(await req.body.useremail == null){
+            return res.status(402).send("Please Enter email or username")
         }else if(await req.body.password == null){
-            return res.status(402).send("Please Enter your Password!")
+            return res.status(402).send("Please Enter Password!")
         }
 
-        const findUser = await Register.findOne({email : req.body.email });
+        const findUser = await Register.findOne({
+            $or : [
+                {username : req.body.useremail },
+                {email : req.body.useremail },
+            ]
+        });
 
         if(findUser == null ){
             return res.status(404).send("Account not found!")
