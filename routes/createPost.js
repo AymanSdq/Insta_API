@@ -11,6 +11,7 @@ app.use(express.json());
 router.post("/" , authenticateToken , (req, res) => {
 
     // Posting the post on instagram routes
+    const test = 1;
 
 
 });
