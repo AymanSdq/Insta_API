@@ -18,7 +18,7 @@ const postSchema = new Schema({
 
     postImgVid : [{
         type : String,
-        required : true,
+        //required : true,
 
     }],
 
