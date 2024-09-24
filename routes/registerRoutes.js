@@ -24,6 +24,9 @@ router.post('/', async (req, res) =>{
             password : req.body.password,
         });
 
+
+
+        
         registerData.save()
             .then((result) => {
 
